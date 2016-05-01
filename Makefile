@@ -17,11 +17,10 @@ VERSION                 ?= $(ABI_VERSION).0
 libubacktrace_SO        ?= libubacktrace.so
 libubacktrace_SONAME    ?= $(libubacktrace_SO).$(ABI_VERSION)
 libubacktrace_FULL_NAME ?= $(libubacktrace_SO).$(VERSION)
-libc_FULL_PATH          ?= /usr/lib/libc.so
-libgcc_a_FULL_PATH      ?= /usr/lib/gcc/x86_64-gentoo-linux-musl/4.9.3/libgcc.a
+libgcc_a_FULL_PATH      ?= $(shell gcc -print-file-name=libgcc.a)
 INCLUDE                 ?= /usr/include
 PREFIX                  ?=
-LIBADD                  ?=
+LIBADD                  ?= -lc -ldl
 
 CC         = $(CROSS_COMPILE)gcc
 STRIP      = $(CROSS_COMPILE)strip -x -R .note -R .comment
@@ -44,7 +43,7 @@ libubacktrace_OBJS := $(patsubst %.c,%.o,$(libubacktrace_SRCS))
 %.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ -o $@
 
-$(libubacktrace_FULL_NAME): $(libubacktrace_OBJS) $(libc_FULL_PATH) $(libgcc_a_FULL_PATH)
+$(libubacktrace_FULL_NAME): $(libubacktrace_OBJS) $(libgcc_a_FULL_PATH)
 	$(CC) $(LDFLAGS) -Wl,-soname=$(libubacktrace_SONAME) -nostdlib -nostartfiles -o $(libubacktrace_FULL_NAME) $^ $(LIBADD)
 	strip -x -R .note -R .comment $(libubacktrace_FULL_NAME)
 
