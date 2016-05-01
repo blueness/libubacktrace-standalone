@@ -17,7 +17,6 @@ VERSION                 ?= $(ABI_VERSION).0
 libubacktrace_SO        ?= libubacktrace.so
 libubacktrace_SONAME    ?= $(libubacktrace_SO).$(ABI_VERSION)
 libubacktrace_FULL_NAME ?= $(libubacktrace_SO).$(VERSION)
-libgcc_a_FULL_PATH      ?= $(shell gcc -print-file-name=libgcc.a)
 INCLUDE                 ?= /usr/include
 PREFIX                  ?=
 LIBADD                  ?= -lc -ldl
@@ -32,7 +31,7 @@ RM         = rm -f
 CPPFLAGS += -D_GNU_SOURCE -DLIBGCC_S_SO=\"libgcc_s.so.1\" -I.
 CFLAGS += -Wall -Wstrict-prototypes -Wstrict-aliasing -fstrict-aliasing \
 	-funsigned-char -fno-builtin -fno-asm -std=gnu99 -fstack-protector-all \
-	-fasynchronous-unwind-tables -fPIC
+	-fasynchronous-unwind-tables -static-libgcc -fPIC
 LDFLAGS += -Wl,-EL -shared -Wl,--warn-common -Wl,--warn-once -Wl,-z,combreloc \
 	-Wl,-z,relro -Wl,-z,now -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,defs -Wl,-s
 
@@ -43,7 +42,7 @@ libubacktrace_OBJS := $(patsubst %.c,%.o,$(libubacktrace_SRCS))
 %.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ -o $@
 
-$(libubacktrace_FULL_NAME): $(libubacktrace_OBJS) $(libgcc_a_FULL_PATH)
+$(libubacktrace_FULL_NAME): $(libubacktrace_OBJS)
 	$(CC) $(LDFLAGS) -Wl,-soname=$(libubacktrace_SONAME) -nostdlib -nostartfiles -o $(libubacktrace_FULL_NAME) $^ $(LIBADD)
 	strip -x -R .note -R .comment $(libubacktrace_FULL_NAME)
 
