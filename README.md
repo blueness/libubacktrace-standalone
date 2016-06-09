@@ -14,4 +14,4 @@ obtain the complete backtrace, make sure that buffer and size are large enough.
 Maintainer: Anthony G. Basile <blueness@gentoo.org>
 
 ## Build Status
-[![Repoman Status](https://travis-ci.org/blueness/libubacktrace-standalone.png)](https://travis-ci.org/blueness/libubacktrace-standalone)
+[![Status](https://travis-ci.org/blueness/libubacktrace-standalone.png)](https://travis-ci.org/blueness/libubacktrace-standalone)
