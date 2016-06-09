@@ -1,0 +1,13 @@
+language: c
+compiler:
+  - gcc
+  - clang
+script:
+ - make
+ - ./test-backtrace.sh
+notifications:
+  irc:
+    channels:
+      - "irc.freenode.org#gentoo-hardened"
+    on_success: change
+    on_failure: always
