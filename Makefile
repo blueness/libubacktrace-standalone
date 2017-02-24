@@ -19,7 +19,7 @@ libubacktrace_SONAME    ?= $(libubacktrace_SO).$(ABI_VERSION)
 libubacktrace_FULL_NAME ?= $(libubacktrace_SO).$(VERSION)
 INCLUDE                 ?= /usr/include
 PREFIX                  ?=
-LIBADD                  ?= -lc -ldl
+LIBADD                  ?= -lc -ldl -lgcc_eh
 
 CC         = $(CROSS_COMPILE)gcc
 STRIP      = $(CROSS_COMPILE)strip -x -R .note -R .comment
